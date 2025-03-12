@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
   const navItems = [
     { icon: Home, label: "Home", path: "/" },
     { icon: Film, label: "Movies", path: "/movies" },
-    { icon: Bookmark, label: "TV Shows", path: "/tv" },
+    { icon: Bookmark, label: "Watchlist", path: "/watchlist" },
     { icon: Search, label: "Discover", path: "/discover" },
   ];
 
