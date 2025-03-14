@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
   Home,
@@ -8,20 +8,31 @@ import {
   Film,
   Menu,
   X,
-  Globe,
+  LogOut,
   User,
-  Bell,
+  LogIn,
+  UserPlus,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
 
   // Track scroll position for transparency effect
   useEffect(() => {
@@ -38,12 +49,26 @@ const Navbar: React.FC = () => {
     return location.pathname === path;
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    setMobileMenuOpen(false);
+  };
+
   const navItems = [
     { icon: Home, label: "Home", path: "/" },
     { icon: Film, label: "Movies", path: "/movies" },
-    { icon: Bookmark, label: "Watchlist", path: "/watchlist" },
     { icon: Search, label: "Discover", path: "/discover" },
   ];
+
+  // Add watchlist only if authenticated
+  if (isAuthenticated) {
+    navItems.splice(2, 0, {
+      icon: Bookmark,
+      label: "Watchlist",
+      path: "/watchlist",
+    });
+  }
 
   return (
     <header
@@ -96,14 +121,68 @@ const Navbar: React.FC = () => {
             <Search className="h-4 w-4" />
           </Button>
 
-          {/* User profile */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 rounded-full text-gray-400 hover:text-primary transition-colors"
-          >
-            <User className="h-4 w-4" />
-          </Button>
+          {/* User profile or Auth buttons */}
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full text-gray-400 hover:text-white transition-colors"
+                >
+                  <User className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="w-56 bg-zinc-900 border border-zinc-800 text-white"
+              >
+                <div className="px-3 py-2 text-sm font-medium text-gray-300">
+                  {user?.name || "User"}
+                </div>
+                <div className="px-3 py-1 text-xs text-gray-500 truncate">
+                  {user?.email || ""}
+                </div>
+                <DropdownMenuSeparator className="bg-zinc-800" />
+                <Link to="/profile">
+                  <DropdownMenuItem className="cursor-pointer hover:bg-zinc-800">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="cursor-pointer hover:bg-zinc-800"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Logout</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className="hidden md:flex items-center space-x-2">
+              <Link to="/login">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-400 hover:text-white"
+                >
+                  <LogIn className="h-4 w-4 mr-1" />
+                  <span>Login</span>
+                </Button>
+              </Link>
+              <Link to="/signup">
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="bg-indigo-600 hover:bg-indigo-700"
+                >
+                  <UserPlus className="h-4 w-4 mr-1" />
+                  <span>Sign Up</span>
+                </Button>
+              </Link>
+            </div>
+          )}
 
           {/* Mobile menu button */}
           {isMobile && (
@@ -142,6 +221,13 @@ const Navbar: React.FC = () => {
                   placeholder="Search for movies, TV shows, actors..."
                   className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-full py-2 pl-10 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent"
                   autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const target = e.target as HTMLInputElement;
+                      navigate(`/search?q=${encodeURIComponent(target.value)}`);
+                      setSearchOpen(false);
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -177,11 +263,45 @@ const Navbar: React.FC = () => {
                 </Link>
               ))}
 
-              {/* User avatar */}
-              <div className="flex items-center space-x-2 px-3 py-3 text-gray-400 border-t border-zinc-800/50 ext-white cursor-pointer transition-all duration-300 hover:bg-indigo-500/40 hover:text-white rounded-lg mt-2">
-                <User className="h-4 w-4" />
-                <span>Profile</span>
-              </div>
+              {/* Authentication Mobile Menu Items */}
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/profile"
+                    className="flex items-center space-x-3 px-3 py-3 text-gray-400 hover:text-white hover:bg-zinc-800/50 rounded-lg"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <User className="h-5 w-5" />
+                    <span>Profile</span>
+                  </Link>
+                  <div
+                    className="flex items-center space-x-3 px-3 py-3 cursor-pointer text-gray-400 hover:text-white hover:bg-zinc-800/50 rounded-lg"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-5 w-5" />
+                    <span>Logout</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="flex items-center space-x-3 px-3 py-3 text-gray-400 hover:text-white hover:bg-zinc-800/50 rounded-lg"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <LogIn className="h-5 w-5" />
+                    <span>Login</span>
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="flex items-center space-x-3 px-3 py-3 text-gray-400 hover:text-white hover:bg-zinc-800/50 rounded-lg"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <UserPlus className="h-5 w-5" />
+                    <span>Sign Up</span>
+                  </Link>
+                </>
+              )}
             </nav>
           </motion.div>
         )}
