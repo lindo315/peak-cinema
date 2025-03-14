@@ -408,13 +408,13 @@ const MovieDetails = () => {
                       <User className="h-4 w-4 mr-2 inline-block" />
                       Cast
                     </TabsTrigger>
-                    <TabsTrigger
+                    {/* <TabsTrigger
                       value="media"
                       className="flex-1 px-4 py-2 text-white font-medium rounded-t-lg border-b-2 border-transparent transition-all duration-300 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-black/40 hover:bg-black/30 hover:text-primary/90"
                     >
                       <PlayCircle className="h-4 w-4 mr-2 inline-block" />
                       Media
-                    </TabsTrigger>
+                    </TabsTrigger> */}
                     <TabsTrigger
                       value="similar"
                       className="flex-1 px-4 py-2 text-white font-medium rounded-t-lg border-b-2 border-transparent transition-all duration-300 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-black/40 hover:bg-black/30 hover:text-primary/90"
