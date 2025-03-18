@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-zinc-900 to-black text-white">
+    <div className="min-h-screen flex flex-col bg-black text-white">
       {/* Loading screen */}
       <AnimatePresence>
         {isLoading && (

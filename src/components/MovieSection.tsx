@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Movie } from "@/lib/api";
@@ -30,7 +29,7 @@ const MovieSection: React.FC<MovieSectionProps> = ({
       <div className="container px-4 sm:px-6 mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-semibold text-balance">{title}</h2>
-          
+
           {viewAllLink && (
             <Link
               to={viewAllLink}
@@ -41,7 +40,7 @@ const MovieSection: React.FC<MovieSectionProps> = ({
             </Link>
           )}
         </div>
-        
+
         <MovieGrid
           movies={movies}
           loading={loading}
