@@ -99,7 +99,7 @@ const Navbar: React.FC = () => {
                   "flex items-center space-x-1 text-sm transition-all duration-300 border-b-2 py-1",
                   isActive(item.path)
                     ? "text-white border-indigo-500 font-medium"
-                    : "text-gray-400 border-transparent hover:text-white hover:border-indigo-400"
+                    : "text-gray-100 border-transparent hover:text-white hover:border-indigo-400"
                 )}
               >
                 <item.icon className="h-4 w-4" />
@@ -116,7 +116,7 @@ const Navbar: React.FC = () => {
             variant="ghost"
             size="icon"
             onClick={() => setSearchOpen(!searchOpen)}
-            className="h-8 w-8 rounded-full text-gray-400 hover:text-primary transition-colors"
+            className="h-8 w-8 rounded-full text-gray-100 hover:text-primary transition-colors"
           >
             <Search className="h-4 w-4" />
           </Button>
@@ -128,7 +128,7 @@ const Navbar: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 rounded-full text-gray-400 hover:text-white transition-colors"
+                  className="h-8 w-8 rounded-full text-gray-100 hover:text-white transition-colors"
                 >
                   <User className="h-4 w-4" />
                 </Button>
