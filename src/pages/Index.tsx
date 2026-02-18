@@ -1,8 +1,7 @@
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import HeroSection from "@/components/HeroSection";
-import MovieSection from "@/components/MovieSection";
+import MovieCarousel from "@/components/MovieCarousel";
 import {
   getPopularMovies,
   getTopRatedMovies,
@@ -31,53 +30,54 @@ const Index = () => {
     queryFn: getUpcomingMovies,
   });
 
-  // Get a featured movie for the hero section
-  const featuredMovie = nowPlayingMovies?.[0];
-
   return (
     <Layout>
       <div className="pb-16 animate-fade-in">
-        {/* Hero Section */}
-        <HeroSection movie={featuredMovie} loading={loadingNowPlaying} />
-
-        {/* Now Playing Movies */}
-        <MovieSection
-          title="Now Playing"
+        {/* Hero Section — rotates through up to 5 now-playing movies */}
+        <HeroSection
           movies={nowPlayingMovies || []}
           loading={loadingNowPlaying}
-          viewAllLink="/movies/now-playing"
-          className="pt-16"
         />
 
-        <div className="h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent my-4"></div>
+        {/* Now Playing */}
+        <div className="container px-4 sm:px-6 mx-auto pt-12">
+          <MovieCarousel
+            title="Now Playing"
+            movies={nowPlayingMovies || []}
+            loading={loadingNowPlaying}
+            viewAllLink="/movies/now-playing"
+          />
 
-        {/* Popular Movies */}
-        <MovieSection
-          title="Popular Movies"
-          movies={popularMovies || []}
-          loading={loadingPopular}
-          viewAllLink="/movies/popular"
-        />
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent my-4" />
 
-        <div className="h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent my-4"></div>
+          {/* Popular Movies */}
+          <MovieCarousel
+            title="Popular Movies"
+            movies={popularMovies || []}
+            loading={loadingPopular}
+            viewAllLink="/movies/popular"
+          />
 
-        {/* Top Rated Movies */}
-        <MovieSection
-          title="Top Rated"
-          movies={topRatedMovies || []}
-          loading={loadingTopRated}
-          viewAllLink="/movies/top-rated"
-        />
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent my-4" />
 
-        <div className="h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent my-4"></div>
+          {/* Top Rated */}
+          <MovieCarousel
+            title="Top Rated"
+            movies={topRatedMovies || []}
+            loading={loadingTopRated}
+            viewAllLink="/movies/top-rated"
+          />
 
-        {/* Upcoming Movies */}
-        <MovieSection
-          title="Coming Soon"
-          movies={upcomingMovies || []}
-          loading={loadingUpcoming}
-          viewAllLink="/movies/upcoming"
-        />
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent my-4" />
+
+          {/* Coming Soon */}
+          <MovieCarousel
+            title="Coming Soon"
+            movies={upcomingMovies || []}
+            loading={loadingUpcoming}
+            viewAllLink="/movies/upcoming"
+          />
+        </div>
       </div>
     </Layout>
   );

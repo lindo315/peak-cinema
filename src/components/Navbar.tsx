@@ -85,7 +85,7 @@ const Navbar: React.FC = () => {
           to="/"
           className="flex items-center space-x-2 transition-all duration-300 hover:scale-105"
         >
-          <div className="text-xl font-bold text-indigo-400">CineVerse</div>
+          <div className="text-xl font-bold text-indigo-400">Peak Cinema</div>
         </Link>
 
         {/* Desktop navigation */}

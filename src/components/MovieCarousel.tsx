@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { Movie } from "@/lib/api";
 import MovieCard from "./MovieCard";
 import { cn } from "@/lib/utils";
@@ -10,6 +11,7 @@ interface MovieCarouselProps {
   loading?: boolean;
   error?: unknown;
   className?: string;
+  viewAllLink?: string;
 }
 
 const MovieCarousel: React.FC<MovieCarouselProps> = ({
@@ -18,6 +20,7 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({
   loading = false,
   error = null,
   className,
+  viewAllLink,
 }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -72,7 +75,18 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({
 
   return (
     <div className={cn("py-6 relative", className)}>
-      <h2 className="text-xl font-semibold text-white mb-4">{title}</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-semibold text-white">{title}</h2>
+        {viewAllLink && (
+          <Link
+            to={viewAllLink}
+            className="flex items-center text-sm text-primary hover:text-primary/80 transition-colors"
+          >
+            View All
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Link>
+        )}
+      </div>
 
       {/* Left arrow */}
       {showLeftArrow && (
